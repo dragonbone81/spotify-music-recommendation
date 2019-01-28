@@ -3,6 +3,7 @@ const app = express();
 const cors = require("cors");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
+const axios = require("axios");
 // const client = require("./db_connection");
 // const queries = require("./db_queries");
 // const checkJWT = require("./middleware");
@@ -12,6 +13,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.get("/", async (req, res) => {
+    console.log(req, res);
     res.json({success: true, message: 0, input: true});
 });
 

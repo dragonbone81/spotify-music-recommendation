@@ -1,0 +1,18 @@
+{
+  "name": "spotify-music-recomendation",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/dragonbone81/spotify-music-recomendation.git",
+  "author": "Christian <cvernikoff@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "morgan": "^1.9.1",
+    "nodemon": "^1.18.9"
+  }
+}

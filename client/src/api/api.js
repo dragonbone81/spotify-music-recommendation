@@ -1,3 +1,6 @@
+// Array.prototype.group = (chunkSize) => {
+//     return this.reduce((acc, val, i, arr) => !(i % chunkSize) ? acc.concat([arr.slice(i, i + chunkSize)]) : acc, []);
+// };
 const getFollowedArtists = (access_token) => {
     return fetch('https://api.spotify.com/v1/me/following?type=artist&limit=50', {headers: {"Authorization": "Bearer " + access_token}})
         .then(response => response.json())
@@ -7,6 +10,16 @@ const getRelatedArtists = (access_token, artist) => {
     return fetch(`https://api.spotify.com/v1/artists/${artist.id}/related-artists`, {headers: {"Authorization": "Bearer " + access_token}})
         .then(response => response.json())
         .then(data => data.artists);
+};
+const groupArray = (arr, chunkSize) => {
+    return arr.reduce((acc, val, i, arr) => !(i % chunkSize) ? acc.concat([arr.slice(i, i + chunkSize)]) : acc, []);
+};
+const getRecommendationsBasedOnSeed = (access_token, seed_artists) => {
+    // console.log(groupArray(seed_artists, 5));
+    console.log(seed_artists.group(5));
+    return fetch(`https://api.spotify.com/v1/recommendations?seed_artists=${encodeURIComponent(seed_artists.join())}`, {headers: {"Authorization": "Bearer " + access_token}})
+        .then(response => response.json())
+        .then(data => data);
 };
 const flattenArray = array => {
     return array.reduce((arr, el) => [...arr, ...el], []);
@@ -31,4 +44,4 @@ const getUsersRelatedArtists = async (access_token) => {
     return getUniqueArtists(allRelatedArtists);
 };
 
-export {getUsersRelatedArtists}
+export {getUsersRelatedArtists, getRecommendationsBasedOnSeed}

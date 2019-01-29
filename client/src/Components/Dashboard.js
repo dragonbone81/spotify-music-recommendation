@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import '../CSS/App.css';
-import {getUsersRelatedArtists} from '../api/api';
+import {getUsersRelatedArtists, getRecommendationsBasedOnSeed} from '../api/api';
 
 class Dashboard extends Component {
     async componentDidMount() {
@@ -8,7 +8,8 @@ class Dashboard extends Component {
         if (!access_token) {
             this.props.history.push("/login")
         } else {
-            console.log(await getUsersRelatedArtists(access_token))
+            const artists = (await getUsersRelatedArtists(access_token)).map(artist => artist.id);
+            console.log(await getRecommendationsBasedOnSeed(access_token, artists))
         }
     }
 

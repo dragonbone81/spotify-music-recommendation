@@ -42,11 +42,15 @@ const getUsersRelatedArtists = async (access_token) => {
             }, [])));
     return getUniquesFromArray(allRelatedArtists, 'id');
 };
-const getAccessToken = async () => {
+const getAccessToken = () => {
     const refreshToken = localStorage.getItem('refresh_token');
-    if (refreshToken){
-        fetch('http://localhost:3001/refresh', )
+    if (refreshToken) {
+        return fetch(`http://localhost:3001/refresh?refresh_token=${refreshToken}`)
+            .then(response => response.json())
+            .then(auth => localStorage.setItem("access_token", auth.access_token));
+    } else {
+        return new Promise(() => null);
     }
 };
 
-export {getUsersRelatedArtists, getRecommendationsBasedOnSeed}
+export {getUsersRelatedArtists, getRecommendationsBasedOnSeed, getAccessToken}

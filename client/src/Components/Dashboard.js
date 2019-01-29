@@ -4,13 +4,18 @@ import {getUsersRelatedArtists, getRecommendationsBasedOnSeed} from '../api/api'
 
 class Dashboard extends Component {
     async componentDidMount() {
-        const access_token = localStorage.getItem("access_token");
-        if (!access_token) {
-            this.props.history.push("/login")
+        if (!localStorage.getItem("access_token") || !localStorage.getItem("refresh_token")) {
+            this.props.history.push("/login");
         } else {
-            // const artists = (await getUsersRelatedArtists(access_token)).map(artist => artist.id);
-            // const x = await getRecommendationsBasedOnSeed(access_token, artists);
-            // console.log(x);
+            this.props.gettingNewAccessToken.then(async () => {
+                const access_token = localStorage.getItem("access_token");
+                const artists = (await getUsersRelatedArtists(access_token)).map(artist => artist.id);
+                const x = await getRecommendationsBasedOnSeed(access_token, artists);
+                console.log(x);
+            });
+            // this.props.gettingNewAccessToken.then((auth)=>{
+            //     console.log(auth);
+            // })
             // console.log(new Set(x.map(y => y.artists[0].name)))
             // console.log(new Set(x.map(y => y.id)))
         }

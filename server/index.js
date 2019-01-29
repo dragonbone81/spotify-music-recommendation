@@ -27,7 +27,25 @@ app.get("/", async (req, res) => {
         if (error) {
             res.redirect(process.env.FRONTEND_URI || 'http://localhost:3000' + '/fuckit');
         } else {
-            res.redirect(process.env.FRONTEND_URI || 'http://localhost:3000' + '/callback?access_token=' + body.access_token)
+            res.redirect(process.env.FRONTEND_URI || `http://localhost:3000/callback?access_token=${body.access_token}&refresh_token=${body.refresh_token}`)
+        }
+    });
+});
+app.get("/refresh", async (req, res) => {
+    request.post({
+        url: 'https://accounts.spotify.com/api/token',
+        form: {
+            refresh_token: req.query.refresh_token,
+            grant_type: 'refresh_token',
+            client_id: 'xx',
+            client_secret: 'xx',
+        },
+        json: true
+    }, (error, response, body) => {
+        if (error) {
+            res.json({ohShit: ':('});
+        } else {
+            res.json({access_token: body.access_token});
         }
     });
 });

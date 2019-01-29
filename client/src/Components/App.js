@@ -7,6 +7,9 @@ import api from '../api/api';
 import {Switch, Route, withRouter, Redirect} from 'react-router-dom';
 //TODO select which artists are related
 class App extends Component {
+    componentDidMount(){
+
+    }
     render() {
         return (
             <Switch>

@@ -1,6 +1,3 @@
-// Array.prototype.group = (chunkSize) => {
-//     return this.reduce((acc, val, i, arr) => !(i % chunkSize) ? acc.concat([arr.slice(i, i + chunkSize)]) : acc, []);
-// };
 const getFollowedArtists = (access_token) => {
     return fetch('https://api.spotify.com/v1/me/following?type=artist&limit=50', {headers: {"Authorization": "Bearer " + access_token}})
         .then(response => response.json())
@@ -14,24 +11,26 @@ const getRelatedArtists = (access_token, artist) => {
 const groupArray = (arr, chunkSize) => {
     return arr.reduce((acc, val, i, arr) => !(i % chunkSize) ? acc.concat([arr.slice(i, i + chunkSize)]) : acc, []);
 };
-const getRecommendationsBasedOnSeed = (access_token, seed_artists) => {
-    // console.log(groupArray(seed_artists, 5));
-    console.log(seed_artists.group(5));
-    return fetch(`https://api.spotify.com/v1/recommendations?seed_artists=${encodeURIComponent(seed_artists.join())}`, {headers: {"Authorization": "Bearer " + access_token}})
-        .then(response => response.json())
-        .then(data => data);
+const getRecommendationsBasedOnSeed = async (access_token, seed_artists) => {
+    seed_artists = groupArray(seed_artists, 5).map(seeds => {
+        //TODO market=from_token
+        return fetch(`https://api.spotify.com/v1/recommendations?target_energy=1&limit=100&market=US&seed_artists=${encodeURIComponent(seeds.join())}`, {headers: {"Authorization": "Bearer " + access_token}})
+            .then(response => response.json())
+            .then(data => data.tracks);
+    });
+    return getUniquesFromArray(flattenArray(await Promise.all(seed_artists)), 'id');
 };
 const flattenArray = array => {
     return array.reduce((arr, el) => [...arr, ...el], []);
 };
-const getUniqueArtists = artists => {
-    const uniqueArtists = artists.reduce((uniqueArtists, artist) => {
-        if (!(artist.id in uniqueArtists)) {
-            uniqueArtists[artist.id] = artist;
+const getUniquesFromArray = (nonUniqueArray, uniqueID) => {
+    const uniqueArray = nonUniqueArray.reduce((uniqueArray, obj) => {
+        if (!(obj[uniqueID] in uniqueArray)) {
+            uniqueArray[obj[uniqueID]] = obj;
         }
-        return uniqueArtists
+        return uniqueArray
     }, {});
-    return Object.keys(uniqueArtists).map(artistID => uniqueArtists[artistID])
+    return Object.keys(uniqueArray).map(id => uniqueArray[id])
 };
 const getUsersRelatedArtists = async (access_token) => {
     const followedArtists = (await getFollowedArtists(access_token)).map(artist => ({id: artist.id}));
@@ -41,7 +40,13 @@ const getUsersRelatedArtists = async (access_token) => {
                 const relatedArtists = getRelatedArtists(access_token, artist);
                 return [...allRelatedArtists, relatedArtists]
             }, [])));
-    return getUniqueArtists(allRelatedArtists);
+    return getUniquesFromArray(allRelatedArtists, 'id');
+};
+const getAccessToken = async () => {
+    const refreshToken = localStorage.getItem('refresh_token');
+    if (refreshToken){
+        fetch('http://localhost:3001/refresh', )
+    }
 };
 
 export {getUsersRelatedArtists, getRecommendationsBasedOnSeed}

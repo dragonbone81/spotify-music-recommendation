@@ -8,8 +8,11 @@ class Dashboard extends Component {
         if (!access_token) {
             this.props.history.push("/login")
         } else {
-            const artists = (await getUsersRelatedArtists(access_token)).map(artist => artist.id);
-            console.log(await getRecommendationsBasedOnSeed(access_token, artists))
+            // const artists = (await getUsersRelatedArtists(access_token)).map(artist => artist.id);
+            // const x = await getRecommendationsBasedOnSeed(access_token, artists);
+            // console.log(x);
+            // console.log(new Set(x.map(y => y.artists[0].name)))
+            // console.log(new Set(x.map(y => y.id)))
         }
     }
 

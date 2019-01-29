@@ -2,8 +2,11 @@ import React, {Component} from 'react';
 
 class Callback extends Component {
     componentDidMount() {
-        const token = new URLSearchParams(window.location.href.split("?").pop()).get("access_token");
+        const urlSearchSpace = new URLSearchParams(window.location.href.split("?").pop());
+        const token = urlSearchSpace.get("access_token");
+        const refreshToken = urlSearchSpace.get("refresh_token");
         localStorage.setItem("access_token", token);
+        localStorage.setItem("refresh_token", refreshToken);
         this.props.history.push("/dashboard");
     }
 

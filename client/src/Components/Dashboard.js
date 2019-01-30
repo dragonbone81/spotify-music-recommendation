@@ -90,10 +90,23 @@ class Dashboard extends Component {
     };
     getArtistImage = imageArr => {
         if (imageArr.length !== 0) {
-            return imageArr[imageArr.length-2].url;
+            return imageArr[imageArr.length - 2].url;
         } else {
             return null;
         }
+    };
+    selectedArtistClicked = index => {
+        const searchedArtistIndex = this.state.searchedArtists.findIndex(artist => artist.id === this.state.selectedArtists[index].id);
+        if (searchedArtistIndex !== -1) {
+            const newArtist = this.state.searchedArtists[searchedArtistIndex];
+            newArtist.clicked = !newArtist.clicked;
+            this.setState({
+                searchedArtists: [...this.state.searchedArtists.slice(0, searchedArtistIndex), newArtist, ...this.state.searchedArtists.slice(searchedArtistIndex + 1)],
+            });
+        }
+        this.setState({
+            selectedArtists: [...this.state.selectedArtists.slice(0, index), ...this.state.selectedArtists.slice(index + 1)]
+        });
     };
 
     render() {
@@ -133,7 +146,8 @@ class Dashboard extends Component {
                         })}
                     </div>
                     {this.state.selectedArtists.length > 0 &&
-                    <SelectedArtists selectedArtists={this.state.selectedArtists}
+                    <SelectedArtists selectedArtistClicked={this.selectedArtistClicked}
+                                     selectedArtists={this.state.selectedArtists}
                                      getArtistImage={this.getArtistImage}/>}
                 </div>
                 <div className="songs-playlist-col"></div>

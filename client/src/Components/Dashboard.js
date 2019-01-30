@@ -1,17 +1,26 @@
 import React, {Component} from 'react';
 import '../CSS/App.css';
-import {getUsersRelatedArtists, getRecommendationsBasedOnSeed} from '../api/api';
+import {getUsersRelatedArtists, getRecommendationsBasedOnSeed, getUserInfo, getFollowedArtists} from '../api/api';
 
 class Dashboard extends Component {
+    state = {
+        userInfo: {},
+        followedArtists: [],
+    };
+
     async componentDidMount() {
         if (!localStorage.getItem("access_token") || !localStorage.getItem("refresh_token")) {
             this.props.history.push("/login");
         } else {
             this.props.gettingNewAccessToken.then(async () => {
                 const access_token = localStorage.getItem("access_token");
-                const artists = (await getUsersRelatedArtists(access_token)).map(artist => artist.id);
-                const x = await getRecommendationsBasedOnSeed(access_token, artists);
-                console.log(x);
+                // const artists = (await getUsersRelatedArtists(access_token)).map(artist => artist.id);
+                // const x = await getRecommendationsBasedOnSeed(access_token, artists);
+                // console.log(x);
+                this.setState({
+                    userInfo: await getUserInfo(access_token),
+                    followedArtists: await getFollowedArtists(access_token)
+                })
             });
             // this.props.gettingNewAccessToken.then((auth)=>{
             //     console.log(auth);
@@ -84,6 +93,16 @@ class Dashboard extends Component {
     render() {
         return (
             <div className="Dashboard">
+                <div className="header">
+                    <div className="user-greet">
+                        Hey {this.state.userInfo.display_name}!
+                    </div>
+                </div>
+                <div>
+                    {this.state.followedArtists.map(artist => {
+                        return <div>{artist.name}</div>
+                    })}
+                </div>
             </div>
         );
     }

@@ -52,5 +52,10 @@ const getAccessToken = () => {
         return new Promise(() => null);
     }
 };
+const getUserInfo = (access_token) => {
+    return fetch(`https://api.spotify.com/v1/me`, {headers: {"Authorization": "Bearer " + access_token}})
+        .then(response => response.json())
+};
 
-export {getUsersRelatedArtists, getRecommendationsBasedOnSeed, getAccessToken}
+
+export {getUsersRelatedArtists, getRecommendationsBasedOnSeed, getAccessToken, getUserInfo, getFollowedArtists}

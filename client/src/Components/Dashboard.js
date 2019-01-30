@@ -101,6 +101,14 @@ class Dashboard extends Component {
             followedArtists: [...this.state.followedArtists.slice(0, indexSearching), newArtist, ...this.state.followedArtists.slice(indexSearching + 1)]
         })
     };
+    selectAllArtists = (boolean) => {
+        this.setState({
+            followedArtists: this.state.followedArtists.map(artist => {
+                artist.clicked = boolean;
+                return artist
+            })
+        })
+    };
 
     render() {
         return (
@@ -120,7 +128,8 @@ class Dashboard extends Component {
                     <div onClick={() => this.setState({getSongsBFA: !this.state.getSongsBFA})}
                          className="followed-artists-title">Get Songs By Followed Artists
                     </div>
-                    {this.state.getSongsBFA && <GetByFollowedArtists followedArtists={this.state.followedArtists}
+                    {this.state.getSongsBFA && <GetByFollowedArtists selectAllArtists={this.selectAllArtists}
+                                                                     followedArtists={this.state.followedArtists}
                                                                      artistClicked={this.artistClicked}/>}
                 </div>
                 <div className="background"/>

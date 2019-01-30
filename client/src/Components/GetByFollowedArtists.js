@@ -4,11 +4,22 @@ class GetByFollowedArtists extends Component {
     componentDidMount() {
     }
 
+    state = {
+        selectedBoolean: true
+    };
+
     render() {
         return (
             <div>
                 {/*<div className="followed-artists-title">Followed Artists</div>*/}
                 <div className="followed-artists">
+                    <div
+                        onClick={() => {
+                            this.props.selectAllArtists(this.state.selectedBoolean);
+                            this.setState({selectedBoolean: !this.state.selectedBoolean})
+                        }}>
+                        {this.state.selectedBoolean ? 'Select ALL' : 'Deselect ALL'}
+                    </div>
                     {this.props.followedArtists.map((artist, index) => {
                         return (
                             <div className="artist-name-img" key={artist.id}>

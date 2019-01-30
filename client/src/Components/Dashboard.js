@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import '../CSS/App.css';
 import {getUsersRelatedArtists, getRecommendationsBasedOnSeed, getUserInfo, getFollowedArtists} from '../api/api';
+import GetByFollowedArtists from './GetByFollowedArtists'
 
 class Dashboard extends Component {
     state = {
         userInfo: {},
         followedArtists: [],
+        getSongsBFA: false,
     };
 
     async componentDidMount() {
@@ -90,7 +92,6 @@ class Dashboard extends Component {
     //     return x;
     // };
     artistClicked = (indexSearching) => {
-        console.log(indexSearching);
         this.setState({
             followedArtists: this.state.followedArtists.map((artist, index) => {
                 if (indexSearching === index) {
@@ -118,27 +119,11 @@ class Dashboard extends Component {
                     </div>
                 </div>
                 <div className="followed-artists-div">
-                    <div className="followed-artists-title">Followed Artists</div>
-                    <div className="followed-artists">
-                        {this.state.followedArtists.map((artist, index) => {
-                            return (
-                                <div className="artist-name-img" key={artist.id}>
-                                    <div onClick={() => this.artistClicked(index)} className={`artist-img-upper ${artist.clicked ? "clicked" : ""}`}>
-                                        <div className={`artist-img ${artist.clicked ? "clicked" : ""}`}
-                                             style={{backgroundImage: `url(${artist.images[1].url})`}}/>
-                                        <div className={`middle ${artist.clicked ? "clicked" : ""}`}>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80"
-                                                 viewBox="0 0 24 24">
-                                                <path
-                                                    d="M0 11.522l1.578-1.626 7.734 4.619 13.335-12.526 1.353 1.354-14 18.646z"/>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                    <div className="artist-name">{artist.name}</div>
-                                </div>
-                            )
-                        })}
+                    <div onClick={() => this.setState({getSongsBFA: !this.state.getSongsBFA})}
+                         className="followed-artists-title">Get Songs By Followed Artists
                     </div>
+                    {this.state.getSongsBFA && <GetByFollowedArtists followedArtists={this.state.followedArtists}
+                                                                     artistClicked={this.artistClicked}/>}
                 </div>
                 <div className="background"/>
             </div>

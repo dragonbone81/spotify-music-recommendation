@@ -21,7 +21,10 @@ class Dashboard extends Component {
                 // console.log(x);
                 this.setState({
                     userInfo: await getUserInfo(access_token),
-                    followedArtists: await getFollowedArtists(access_token)
+                    followedArtists: (await getFollowedArtists(access_token)).map(artist => {
+                        artist.clicked = false;
+                        return artist
+                    })
                 })
             });
             // this.props.gettingNewAccessToken.then((auth)=>{
@@ -92,15 +95,10 @@ class Dashboard extends Component {
     //     return x;
     // };
     artistClicked = (indexSearching) => {
+        const newArtist = this.state.followedArtists[indexSearching];
+        newArtist.clicked = !newArtist.clicked;
         this.setState({
-            followedArtists: this.state.followedArtists.map((artist, index) => {
-                if (indexSearching === index) {
-                    artist.clicked = !artist.clicked;
-                    return artist;
-                } else {
-                    return artist;
-                }
-            })
+            followedArtists: [...this.state.followedArtists.slice(0, indexSearching), newArtist, ...this.state.followedArtists.slice(indexSearching + 1)]
         })
     };
 

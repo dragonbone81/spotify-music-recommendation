@@ -94,15 +94,33 @@ class Dashboard extends Component {
         return (
             <div className="Dashboard">
                 <div className="header">
+                    {/*<div className="home">*/}
+                    {/*Hey {this.state.userInfo.display_name}!*/}
+                    {/*</div>*/}
+                    <div className="links">
+                        <span>Home</span>
+                    </div>
+                    <div className="links">
+                        <span>Login</span>
+                    </div>
                     <div className="user-greet">
                         Hey {this.state.userInfo.display_name}!
                     </div>
                 </div>
-                <div>
-                    {this.state.followedArtists.map(artist => {
-                        return <div>{artist.name}</div>
-                    })}
+                <div className="followed-artists-div">
+                    <div className="followed-artists-title">Followed Artists</div>
+                    <div className="followed-artists">
+                        {this.state.followedArtists.map(artist => {
+                            return (
+                                <div className="artist-name-img" key={artist.id}>
+                                    <img width={80} height={80} src={artist.images[2].url}/>
+                                    <div>{artist.name}</div>
+                                </div>
+                            )
+                        })}
+                    </div>
                 </div>
+                <div className="_1YMukI_FrE7QRuUVSvq_Qe"/>
             </div>
         );
     }

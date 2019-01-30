@@ -89,14 +89,24 @@ class Dashboard extends Component {
     //     );
     //     return x;
     // };
+    artistClicked = (indexSearching) => {
+        console.log(indexSearching);
+        this.setState({
+            followedArtists: this.state.followedArtists.map((artist, index) => {
+                if (indexSearching === index) {
+                    artist.clicked = !artist.clicked;
+                    return artist;
+                } else {
+                    return artist;
+                }
+            })
+        })
+    };
 
     render() {
         return (
             <div className="Dashboard">
                 <div className="header">
-                    {/*<div className="home">*/}
-                    {/*Hey {this.state.userInfo.display_name}!*/}
-                    {/*</div>*/}
                     <div className="links">
                         <span>Home</span>
                     </div>
@@ -104,23 +114,33 @@ class Dashboard extends Component {
                         <span>Login</span>
                     </div>
                     <div className="user-greet">
-                        Hey {this.state.userInfo.display_name}!
+                        <span>Hey {this.state.userInfo.display_name}!</span>
                     </div>
                 </div>
                 <div className="followed-artists-div">
                     <div className="followed-artists-title">Followed Artists</div>
                     <div className="followed-artists">
-                        {this.state.followedArtists.map(artist => {
+                        {this.state.followedArtists.map((artist, index) => {
                             return (
                                 <div className="artist-name-img" key={artist.id}>
-                                    <img width={80} height={80} src={artist.images[2].url}/>
-                                    <div>{artist.name}</div>
+                                    <div onClick={() => this.artistClicked(index)} className={`artist-img-upper ${artist.clicked ? "clicked" : ""}`}>
+                                        <div className={`artist-img ${artist.clicked ? "clicked" : ""}`}
+                                             style={{backgroundImage: `url(${artist.images[1].url})`}}/>
+                                        <div className={`middle ${artist.clicked ? "clicked" : ""}`}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80"
+                                                 viewBox="0 0 24 24">
+                                                <path
+                                                    d="M0 11.522l1.578-1.626 7.734 4.619 13.335-12.526 1.353 1.354-14 18.646z"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div className="artist-name">{artist.name}</div>
                                 </div>
                             )
                         })}
                     </div>
                 </div>
-                <div className="_1YMukI_FrE7QRuUVSvq_Qe"/>
+                <div className="background"/>
             </div>
         );
     }

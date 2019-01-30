@@ -56,6 +56,23 @@ const getUserInfo = (access_token) => {
     return fetch(`https://api.spotify.com/v1/me`, {headers: {"Authorization": "Bearer " + access_token}})
         .then(response => response.json())
 };
+const getArtists = (access_token, artistName) => {
+    return fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(artistName)}*&type=artist&decorate_restrictions=true&market=from_token`, {headers: {"Authorization": "Bearer " + access_token}})
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                return {artists: {items: []}}
+            } else {
+                return data;
+            }
+        })
+};
 
-
-export {getUsersRelatedArtists, getRecommendationsBasedOnSeed, getAccessToken, getUserInfo, getFollowedArtists}
+export {
+    getUsersRelatedArtists,
+    getRecommendationsBasedOnSeed,
+    getAccessToken,
+    getUserInfo,
+    getFollowedArtists,
+    getArtists
+}

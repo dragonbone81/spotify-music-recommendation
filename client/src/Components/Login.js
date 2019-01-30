@@ -14,7 +14,7 @@ class Login extends Component {
         // );
         // popup.addEventListener("unload", doStuffOnUnload, false);
         // window.open('http://localhost:3000/callback')
-        window.location = `https://accounts.spotify.com/authorize?client_id=${'e2cdf918537c45a687015a05f70949a8'}&redirect_uri=http://localhost:3001&response_type=code&scope=user-follow-read`
+        window.location = `https://accounts.spotify.com/authorize?client_id=${'e2cdf918537c45a687015a05f70949a8'}&redirect_uri=http://localhost:3001&response_type=code&scope=user-follow-read%20user-read-private`
     };
 
     render() {

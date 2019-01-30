@@ -1,13 +1,22 @@
 import React, {Component} from 'react';
-import '../CSS/App.css';
-import {getUsersRelatedArtists, getRecommendationsBasedOnSeed, getUserInfo, getFollowedArtists} from '../api/api';
+import '../CSS/Dashboard.css';
+import {
+    getUsersRelatedArtists,
+    getRecommendationsBasedOnSeed,
+    getUserInfo,
+    getFollowedArtists,
+    getArtists
+} from '../api/api';
 import GetByFollowedArtists from './GetByFollowedArtists'
+import ArtistSearchBox from './ArtistSearchBox'
 
 class Dashboard extends Component {
     state = {
         userInfo: {},
         followedArtists: [],
         getSongsBFA: false,
+        artistSearchInput: "",
+        searchedArtists: [],
     };
 
     async componentDidMount() {
@@ -21,10 +30,10 @@ class Dashboard extends Component {
                 // console.log(x);
                 this.setState({
                     userInfo: await getUserInfo(access_token),
-                    followedArtists: (await getFollowedArtists(access_token)).map(artist => {
-                        artist.clicked = false;
-                        return artist
-                    })
+                    // followedArtists: (await getFollowedArtists(access_token)).map(artist => {
+                    //     artist.clicked = false;
+                    //     return artist
+                    // })
                 })
             });
             // this.props.gettingNewAccessToken.then((auth)=>{
@@ -35,65 +44,6 @@ class Dashboard extends Component {
         }
     }
 
-    // getAlltracksForAllArtists = async (access_token) => {
-    //     const response = await fetch('https://api.spotify.com/v1/me/following?type=artist&limit=50', {headers: {"Authorization": "Bearer " + access_token}});
-    //     const artists = (await response.json()).artists.items;
-    //     const related_artists = Array.from(new Set(await Promise.all(
-    //         artists.reduce((related_artists, artist) => {
-    //             const promise = fetch(`https://api.spotify.com/v1/artists/${artist.id}/related-artists`, {headers: {"Authorization": "Bearer " + access_token}}).then((response) => {
-    //                 return response.json();
-    //             }).then((data) => {
-    //                 return data.artists.map(artist => {
-    //                     return artist.id
-    //                 });
-    //             });
-    //             return [...related_artists, promise]
-    //         }, [])
-    //     ).then((resolved) =>
-    //         resolved.reduce((related_artists, artists) => {
-    //             return [...related_artists, ...artists]
-    //         }, [])
-    //     )));
-    //     const x = await this.getTracks(related_artists, access_token);
-    //     console.log(Array.from(new Set(x)))
-    // };
-    //
-    // getTracks = async (related_artists, access_token) => {
-    //     let all_tracks = await Promise.all(related_artists.reduce((all_tracks, artist) => {
-    //         //TODO loop through limit
-    //         const albums = fetch(`https://api.spotify.com/v1/artists/${artist}/albums?include_groups=album,single`, {headers: {"Authorization": "Bearer " + access_token}})
-    //             .then(response => response.json())
-    //             .then(data => {
-    //                 return data.items;
-    //             });
-    //         const tracks = albums.then(resolved_albums => {
-    //             return resolved_albums.reduce((tracks, album) => {
-    //                 //TODO loop through limit
-    //                 const album_tracks = fetch(`https://api.spotify.com/v1/albums/${album.id}/tracks?limit=50`, {headers: {"Authorization": "Bearer " + access_token}})
-    //                     .then(response => response.json())
-    //                     .then(data => {
-    //                         return data.items.map(el => {
-    //                             return el.id
-    //                         });
-    //                     });
-    //                 return [...tracks, album_tracks]
-    //             }, []);
-    //         });
-    //         return [...all_tracks, tracks];
-    //     }, [])).then(list => list.map(function (innerPromiseArray) {
-    //         return Promise.all(innerPromiseArray);
-    //     }));
-    //     const x = Promise.all(all_tracks).then((resolved) =>
-    //         resolved.reduce((album_tracks, tracks) => {
-    //             return [...album_tracks, ...tracks]
-    //         }, [])
-    //     ).then((resolved) =>
-    //         resolved.reduce((album_tracks, tracks) => {
-    //             return [...album_tracks, ...tracks]
-    //         }, [])
-    //     );
-    //     return x;
-    // };
     artistClicked = (indexSearching) => {
         const newArtist = this.state.followedArtists[indexSearching];
         newArtist.clicked = !newArtist.clicked;
@@ -109,29 +59,57 @@ class Dashboard extends Component {
             })
         })
     };
+    changeArtistSearchInput = value => {
+        this.setState({artistSearchInput: value}, () => {
+            getArtists(localStorage.getItem("access_token"), this.state.artistSearchInput)
+                .then(res => this.setState({searchedArtists: res.artists.items}));
+        });
+    };
+    getArtistImage = imageArr => {
+        if (imageArr.length !== 0) {
+            return imageArr[0].url;
+        } else {
+            return null;
+        }
+    };
 
     render() {
         return (
             <div className="Dashboard">
-                <div className="header">
-                    <div className="links">
-                        <span>Home</span>
-                    </div>
-                    <div className="links">
-                        <span>Login</span>
-                    </div>
-                    <div className="user-greet">
-                        <span>Hey {this.state.userInfo.display_name}!</span>
+                <div className="main-content">
+                    <ArtistSearchBox artistSearchInput={this.state.artistSearchInput}
+                                     changeArtistSearchInput={this.changeArtistSearchInput}/>
+                    <div className="search-results">
+                        {this.state.searchedArtists.map((artist, index) => {
+                            return (
+                                <div className="artist-name-img" key={artist.id}>
+                                    <div onClick={() => this.artistClicked(index)}
+                                         className={`artist-img-upper ${artist.clicked ? "clicked" : ""}`}>
+                                        {this.getArtistImage(artist.images) ?
+                                            <div className={`artist-img ${artist.clicked ? "clicked" : ""}`}
+                                                 style={{backgroundImage: `url(${this.getArtistImage(artist.images)})`}}/> :
+                                            <div className={`artist-img ${artist.clicked ? "clicked" : ""}`}>
+                                                <svg className="default-user-pic" xmlns="http://www.w3.org/2000/svg" width="100" height="100"
+                                                     viewBox="0 0 24 24">
+                                                    <path
+                                                        d="M22 22.966v1.034h-20v-1.034c0-2.1.166-3.312 2.648-3.886 2.804-.647 5.572-1.227 4.241-3.682-3.943-7.274-1.124-11.398 3.111-11.398 4.152 0 7.043 3.972 3.11 11.398-1.292 2.44 1.375 3.02 4.241 3.682 2.483.573 2.649 1.786 2.649 3.886zm-10-21.229c2.228-.004 3.948 1.329 4.492 3.513h1.212c-.528-2.963-2.624-5.25-5.704-5.25s-5.176 2.287-5.704 5.25h1.212c.544-2.184 2.264-3.518 4.492-3.513zm5.542 10.263c1.608 0 2.458-1.507 2.458-3.01 0-1.497-.842-2.99-2.755-2.99.832 1.603.925 3.656.297 6zm-11.112 0c-.632-2.331-.534-4.384.313-6-1.913 0-2.743 1.489-2.743 2.984 0 1.505.843 3.016 2.43 3.016z"/>
+                                                </svg>
+                                            </div>}
+                                        <div className={`middle ${artist.clicked ? "clicked" : ""}`}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80"
+                                                 viewBox="0 0 24 24">
+                                                <path
+                                                    d="M0 11.522l1.578-1.626 7.734 4.619 13.335-12.526 1.353 1.354-14 18.646z"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div className="artist-name">{artist.name}</div>
+                                </div>
+                            )
+                        })}
                     </div>
                 </div>
-                <div className="followed-artists-div">
-                    <div onClick={() => this.setState({getSongsBFA: !this.state.getSongsBFA})}
-                         className="followed-artists-title">Get Songs By Followed Artists
-                    </div>
-                    {this.state.getSongsBFA && <GetByFollowedArtists selectAllArtists={this.selectAllArtists}
-                                                                     followedArtists={this.state.followedArtists}
-                                                                     artistClicked={this.artistClicked}/>}
-                </div>
+                <div className="songs-playlist-col"></div>
                 <div className="background"/>
             </div>
         );
@@ -139,3 +117,43 @@ class Dashboard extends Component {
 }
 
 export default Dashboard;
+
+
+{/*<div className="header">*/
+}
+{/*<div className="links">*/
+}
+{/*<span>Home</span>*/
+}
+{/*</div>*/
+}
+{/*<div className="links">*/
+}
+{/*<span>Login</span>*/
+}
+{/*</div>*/
+}
+{/*<div className="user-greet">*/
+}
+{/*<span>Hey {this.state.userInfo.display_name}!</span>*/
+}
+{/*</div>*/
+}
+{/*</div>*/
+}
+{/*<div className="followed-artists-div">*/
+}
+{/*<div onClick={() => this.setState({getSongsBFA: !this.state.getSongsBFA})}*/
+}
+{/*className="followed-artists-title">Get Songs By Followed Artists*/
+}
+{/*</div>*/
+}
+{/*{this.state.getSongsBFA && <GetByFollowedArtists selectAllArtists={this.selectAllArtists}*/
+}
+{/*followedArtists={this.state.followedArtists}*/
+}
+{/*artistClicked={this.artistClicked}/>}*/
+}
+{/*</div>*/
+}

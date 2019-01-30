@@ -14,11 +14,20 @@ const groupArray = (arr, chunkSize) => {
 const getRecommendationsBasedOnSeed = async (access_token, seed_artists) => {
     seed_artists = groupArray(seed_artists, 5).map(seeds => {
         //TODO market=from_token
-        return fetch(`https://api.spotify.com/v1/recommendations?target_energy=1&limit=100&market=US&seed_artists=${encodeURIComponent(seeds.join())}`, {headers: {"Authorization": "Bearer " + access_token}})
+        return fetch(`https://api.spotify.com/v1/recommendations?target_energy=1&limit=100&market=from_token&seed_artists=${encodeURIComponent(seeds.join())}`, {headers: {"Authorization": "Bearer " + access_token}})
             .then(response => response.json())
             .then(data => data.tracks);
     });
     return getUniquesFromArray(flattenArray(await Promise.all(seed_artists)), 'id');
+};
+const getSongsFromRecommendations = async (access_token, seed_songs) => {
+    seed_songs = groupArray(seed_songs, 50).map(seed_songs => {
+        //TODO market=from_token
+        return fetch(`https://api.spotify.com/v1/tracks?market=from_token&ids=${encodeURIComponent(seed_songs.map(song => song.id).join())}`, {headers: {"Authorization": "Bearer " + access_token}})
+            .then(response => response.json())
+            .then(data => data.tracks);
+    });
+    return flattenArray(await Promise.all(seed_songs));
 };
 const flattenArray = array => {
     return array.reduce((arr, el) => [...arr, ...el], []);
@@ -74,5 +83,7 @@ export {
     getAccessToken,
     getUserInfo,
     getFollowedArtists,
-    getArtists
+    getArtists,
+    getRelatedArtists,
+    getSongsFromRecommendations,
 }

@@ -257,3 +257,10 @@ body, html {
 input:focus {
     outline: none;
 }
+
+.search-artists-text{
+    margin: auto;
+    font-size: 60px;
+    color: white;
+    text-align: center;
+}

@@ -5,7 +5,9 @@ import {
     getRecommendationsBasedOnSeed,
     getUserInfo,
     getFollowedArtists,
-    getArtists
+    getArtists,
+    getRelatedArtists,
+    getSongsFromRecommendations,
 } from '../api/api';
 import GetByFollowedArtists from './GetByFollowedArtists'
 import ArtistSearchBox from './ArtistSearchBox'
@@ -20,6 +22,18 @@ class Dashboard extends Component {
         searchedArtists: [],
         selectedArtists: [],
     };
+
+    async componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevState.selectedArtists.map(artist => artist.id).toString() !== this.state.selectedArtists.map(artist => artist.id).toString()) {
+            // this.state.selectedArtists.forEach(artist => {
+            //     console.log(artist);
+            //     getRelatedArtists(localStorage.getItem("access_token"), artist).then(response => console.log(response));
+            // })
+            const songs = await getRecommendationsBasedOnSeed(localStorage.getItem("access_token"), this.state.selectedArtists.map(artist => artist.id));
+            // const x = await getSongsFromRecommendations(localStorage.getItem("access_token"), songs);
+            console.log(songs);
+        }
+    }
 
     async componentDidMount() {
         if (!localStorage.getItem("access_token") || !localStorage.getItem("refresh_token")) {
@@ -61,11 +75,6 @@ class Dashboard extends Component {
                 searchedArtists: [...this.state.searchedArtists.slice(0, indexSearching), newArtist, ...this.state.searchedArtists.slice(indexSearching + 1)],
             })
         }
-        // const newArtist = this.state.searchedArtists[indexSearching];
-        // newArtist.clicked = !newArtist.clicked;
-        // this.setState({
-        //     searchedArtists: [...this.state.searchedArtists.slice(0, indexSearching), newArtist, ...this.state.searchedArtists.slice(indexSearching + 1)]
-        // })
     };
     selectAllArtists = (boolean) => {
         this.setState({
@@ -145,6 +154,8 @@ class Dashboard extends Component {
                             )
                         })}
                     </div>
+                    {this.state.searchedArtists.length === 0 &&
+                    <div className="search-artists-text">Search for artists to be considered in the algorithm...</div>}
                     {this.state.selectedArtists.length > 0 &&
                     <SelectedArtists selectedArtistClicked={this.selectedArtistClicked}
                                      selectedArtists={this.state.selectedArtists}

@@ -12,6 +12,7 @@ import {
 import GetByFollowedArtists from './GetByFollowedArtists'
 import ArtistSearchBox from './ArtistSearchBox'
 import SelectedArtists from './SelectedArtists'
+import SuggestedSongs from './SuggestedSongs'
 
 class Dashboard extends Component {
     state = {
@@ -21,6 +22,7 @@ class Dashboard extends Component {
         artistSearchInput: "",
         searchedArtists: [],
         selectedArtists: [],
+        suggestedSongs: [],
     };
 
     async componentDidUpdate(prevProps, prevState, snapshot) {
@@ -31,7 +33,8 @@ class Dashboard extends Component {
             // })
             const songs = await getRecommendationsBasedOnSeed(localStorage.getItem("access_token"), this.state.selectedArtists.map(artist => artist.id));
             // const x = await getSongsFromRecommendations(localStorage.getItem("access_token"), songs);
-            console.log(songs);
+            console.log(songs.length);
+            this.setState({suggestedSongs: songs});
         }
     }
 
@@ -161,7 +164,7 @@ class Dashboard extends Component {
                                      selectedArtists={this.state.selectedArtists}
                                      getArtistImage={this.getArtistImage}/>}
                 </div>
-                <div className="songs-playlist-col"></div>
+                <SuggestedSongs suggestedSongs={this.state.suggestedSongs}/>
                 <div className="background"/>
             </div>
         );

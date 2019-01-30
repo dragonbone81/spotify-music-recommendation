@@ -12,9 +12,9 @@ const groupArray = (arr, chunkSize) => {
     return arr.reduce((acc, val, i, arr) => !(i % chunkSize) ? acc.concat([arr.slice(i, i + chunkSize)]) : acc, []);
 };
 const getRecommendationsBasedOnSeed = async (access_token, seed_artists) => {
-    seed_artists = groupArray(seed_artists, 5).map(seeds => {
+    seed_artists = groupArray(seed_artists, 1).map(seeds => {
         //TODO market=from_token
-        return fetch(`https://api.spotify.com/v1/recommendations?target_energy=1&limit=100&market=from_token&seed_artists=${encodeURIComponent(seeds.join())}`, {headers: {"Authorization": "Bearer " + access_token}})
+        return fetch(`https://api.spotify.com/v1/recommendations?min_energy=0.5&limit=100&market=from_token&seed_artists=${encodeURIComponent(seeds.join())}`, {headers: {"Authorization": "Bearer " + access_token}})
             .then(response => response.json())
             .then(data => data.tracks);
     });

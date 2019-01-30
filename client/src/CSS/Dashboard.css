@@ -61,6 +61,8 @@ body, html {
     display: flex;
     flex-direction: column;
     position: relative;
+    padding: 10px;
+    border-right: 3px solid rgba(69, 168, 200, 0.33);
 }
 
 .search-block {
@@ -250,17 +252,34 @@ body, html {
 }
 
 .songs-playlist-col {
-    background-color: blue;
     flex-basis: calc(100% / 3);
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    color: white;
+    -ms-overflow-style: none;
+    overflow: -moz-scrollbars-none;
+    padding: 10px;
+}
+.songs-suggested-text{
+    margin: auto;
+    text-align: center;
+    font-size: 40px;
+}
+.songs-playlist-col::-webkit-scrollbar {
+    display: none;
 }
 
 input:focus {
     outline: none;
 }
 
-.search-artists-text{
+.search-artists-text {
     margin: auto;
     font-size: 60px;
     color: white;
     text-align: center;
+}
+.audio-control{
+    position: absolute;
 }

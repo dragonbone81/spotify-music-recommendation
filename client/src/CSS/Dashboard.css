@@ -72,7 +72,7 @@ body, html {
 
 .selected-artists {
     display: flex;
-    width: calc(100% - 20px);
+    width: calc(100% - 30px);
     flex-direction: row;
     justify-content: flex-start;
     overflow-x: auto;
@@ -261,11 +261,13 @@ body, html {
     overflow: -moz-scrollbars-none;
     padding: 10px;
 }
-.songs-suggested-text{
+
+.songs-suggested-text {
     margin: auto;
     text-align: center;
     font-size: 40px;
 }
+
 .songs-playlist-col::-webkit-scrollbar {
     display: none;
 }
@@ -280,6 +282,34 @@ input:focus {
     color: white;
     text-align: center;
 }
-.audio-control{
-    position: absolute;
+
+.audio-control {
+    /*position: absolute;*/
+}
+
+.song-div {
+    display: flex;
+    flex-direction: column;
+    /*align-content: flex-start;*/
+    padding: 10px;
+}
+
+.song-name {
+    font-size: 25px;
+}
+
+.song-artists {
+    color: #dddddd;
+}
+
+.song-container {
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+}
+.song-music-icon{
+    width: 50px;
+    fill: white;
+    align-self: center;
+    text-align: center;
 }

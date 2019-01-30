@@ -8,6 +8,7 @@ import {
     getArtists,
     getRelatedArtists,
     getSongsFromRecommendations,
+    getUniquesFromArray,
 } from '../api/api';
 import GetByFollowedArtists from './GetByFollowedArtists'
 import ArtistSearchBox from './ArtistSearchBox'

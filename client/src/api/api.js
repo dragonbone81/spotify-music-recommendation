@@ -86,4 +86,5 @@ export {
     getArtists,
     getRelatedArtists,
     getSongsFromRecommendations,
+    getUniquesFromArray,
 }

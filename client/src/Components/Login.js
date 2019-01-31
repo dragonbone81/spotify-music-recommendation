@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import '../CSS/App.css';
-import api from '../api/api';
 
 class Login extends Component {
     SERVER_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:3001";

@@ -42,7 +42,7 @@ class SuggestedSongs extends Component {
 
     render() {
         return (
-            <div className="top-col">
+            <div className="suggested-songs-container">
                 <div className="song-container-title">
                     <div className="select-tracks-title">Select tracks</div>
                     <div

@@ -14,6 +14,7 @@ import GetByFollowedArtists from './GetByFollowedArtists'
 import ArtistSearchBox from './ArtistSearchBox'
 import SelectedArtists from './SelectedArtists'
 import SuggestedSongs from './SuggestedSongs'
+import SuggestedSongsPlaylistCreator from './SuggestedSongsPlaylistCreator'
 
 class Dashboard extends Component {
     state = {
@@ -34,7 +35,6 @@ class Dashboard extends Component {
             // })
             const songs = await getRecommendationsBasedOnSeed(localStorage.getItem("access_token"), this.state.selectedArtists.map(artist => artist.id));
             // const x = await getSongsFromRecommendations(localStorage.getItem("access_token"), songs);
-            console.log(songs.length);
             this.setState({suggestedSongs: songs});
         }
     }
@@ -182,8 +182,12 @@ class Dashboard extends Component {
                                      selectedArtists={this.state.selectedArtists}
                                      getArtistImage={this.getArtistImage}/>}
                 </div>
-                <SuggestedSongs selectSong={this.selectSong} selectDeselectAll={this.selectDeselectAll}
-                                suggestedSongs={this.state.suggestedSongs}/>
+                <div className="side-bar">
+                    <SuggestedSongs selectSong={this.selectSong} selectDeselectAll={this.selectDeselectAll}
+                                    suggestedSongs={this.state.suggestedSongs}/>
+                    <SuggestedSongsPlaylistCreator tracks={this.state.suggestedSongs.map(track => track.uri)}
+                                                   userID={this.state.userInfo.id}/>
+                </div>
                 <div className="background"/>
             </div>
         );

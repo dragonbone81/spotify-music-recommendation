@@ -66,6 +66,35 @@ const getUserInfo = (access_token) => {
     return fetch(`https://api.spotify.com/v1/me`, {headers: {"Authorization": "Bearer " + access_token}})
         .then(response => response.json())
 };
+const createPlaylist = (access_token, userID, playlistInfo) => {
+    return fetch(`https://api.spotify.com/v1/users/${userID}/playlists`, {
+        method: 'POST',
+        body: JSON.stringify(playlistInfo),
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + access_token,
+        }
+    }).then(res => res.json());
+};
+const addTracksToPlaylist = (access_token, playlistID, tracks) => {
+    const output = groupArray(tracks, 100).map(tracks => {
+        //TODO market=from_token
+        return fetch(`https://api.spotify.com/v1/playlists/${playlistID}/tracks`, {
+            method: 'POST',
+            body: JSON.stringify({uris: tracks}),
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + access_token,
+            }
+        }).then(res => res.json());
+    });
+    return Promise.all(output);
+};
+const createPlaylistAddTracks = async (access_token, tracks, userID, playlistInfo) => {
+    const createdPlaylist = await createPlaylist(access_token, userID, playlistInfo);
+    const res = await addTracksToPlaylist(access_token, createdPlaylist.id, tracks);
+    console.log(createdPlaylist, res);
+};
 const getArtists = (access_token, artistName) => {
     return fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(artistName)}*&type=artist&decorate_restrictions=true&market=from_token`, {headers: {"Authorization": "Bearer " + access_token}})
         .then(response => response.json())
@@ -88,4 +117,5 @@ export {
     getRelatedArtists,
     getSongsFromRecommendations,
     getUniquesFromArray,
+    createPlaylistAddTracks,
 }

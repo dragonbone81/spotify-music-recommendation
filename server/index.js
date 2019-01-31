@@ -3,31 +3,31 @@ const app = express();
 const cors = require("cors");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
-let request = require('request');
-// const client = require("./db_connection");
-// const queries = require("./db_queries");
-// const checkJWT = require("./middleware");
+const request = require('request');
+const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:3000';
+const CLIENT_ID = process.env.CLIENT_ID || 'xxx';
+const CLIENT_SECRET = process.env.CLIENT_SECRET || 'xxx';
 app.use(morgan("short"));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(cors());
 
-app.get("/", async (req, res) => {
+app.get("/login", async (req, res) => {
     request.post({
         url: 'https://accounts.spotify.com/api/token',
         form: {
             code: req.query.code,
             redirect_uri: 'http://localhost:3001',
             grant_type: 'authorization_code',
-            client_id: 'xx',
-            client_secret: 'xx',
+            client_id: CLIENT_ID,
+            client_secret: CLIENT_SECRET,
         },
         json: true
     }, (error, response, body) => {
         if (error) {
-            res.redirect(process.env.FRONTEND_URI || 'http://localhost:3000' + '/fuckit');
+            res.redirect(CLIENT_URL + '/fuckit');
         } else {
-            res.redirect(process.env.FRONTEND_URI || `http://localhost:3000/callback?access_token=${body.access_token}&refresh_token=${body.refresh_token}`)
+            res.redirect(`${CLIENT_URL}/callback?access_token=${body.access_token}&refresh_token=${body.refresh_token}`)
         }
     });
 });
@@ -37,8 +37,8 @@ app.get("/refresh", async (req, res) => {
         form: {
             refresh_token: req.query.refresh_token,
             grant_type: 'refresh_token',
-            client_id: 'xx',
-            client_secret: 'xx',
+            client_id: CLIENT_ID,
+            client_secret: CLIENT_SECRET,
         },
         json: true
     }, (error, response, body) => {
@@ -50,10 +50,4 @@ app.get("/refresh", async (req, res) => {
     });
 });
 
-const server = app.listen(
-    process.env.DB_URL === undefined ? 3001 : null,
-    () => {
-        console.log("Server Started!");
-        // app.locals.db = client;
-    }
-);
+app.listen(process.env.PROD === undefined ? 3001 : null);

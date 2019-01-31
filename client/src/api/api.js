@@ -1,3 +1,4 @@
+const SERVER_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:3001";
 const getFollowedArtists = (access_token) => {
     return fetch('https://api.spotify.com/v1/me/following?type=artist&limit=50', {headers: {"Authorization": "Bearer " + access_token}})
         .then(response => response.json())
@@ -54,7 +55,7 @@ const getUsersRelatedArtists = async (access_token) => {
 const getAccessToken = () => {
     const refreshToken = localStorage.getItem('refresh_token');
     if (refreshToken) {
-        return fetch(`http://localhost:3001/refresh?refresh_token=${refreshToken}`)
+        return fetch(`${SERVER_URL}/refresh?refresh_token=${refreshToken}`)
             .then(response => response.json())
             .then(auth => localStorage.setItem("access_token", auth.access_token));
     } else {

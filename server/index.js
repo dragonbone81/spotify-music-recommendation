@@ -28,7 +28,6 @@ app.get("/login", async (req, res) => {
         },
         json: true
     }, (error, response, body) => {
-        console.log(body, `${SERVER_URL}/login`);
         if (error) {
             res.redirect(CLIENT_URL + '/fuckit');
         } else {

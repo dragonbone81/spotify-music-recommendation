@@ -92,8 +92,8 @@ const addTracksToPlaylist = (access_token, playlistID, tracks) => {
 };
 const createPlaylistAddTracks = async (access_token, tracks, userID, playlistInfo) => {
     const createdPlaylist = await createPlaylist(access_token, userID, playlistInfo);
-    const res = await addTracksToPlaylist(access_token, createdPlaylist.id, tracks);
-    console.log(createdPlaylist, res);
+    await addTracksToPlaylist(access_token, createdPlaylist.id, tracks);
+    return createdPlaylist
 };
 const getArtists = (access_token, artistName) => {
     return fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(artistName)}*&type=artist&decorate_restrictions=true&market=from_token`, {headers: {"Authorization": "Bearer " + access_token}})

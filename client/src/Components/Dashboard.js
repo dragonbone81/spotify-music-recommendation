@@ -185,8 +185,9 @@ class Dashboard extends Component {
                 <div className="side-bar">
                     <SuggestedSongs selectSong={this.selectSong} selectDeselectAll={this.selectDeselectAll}
                                     suggestedSongs={this.state.suggestedSongs}/>
-                    <SuggestedSongsPlaylistCreator tracks={this.state.suggestedSongs.map(track => track.uri)}
-                                                   userID={this.state.userInfo.id}/>
+                    <SuggestedSongsPlaylistCreator
+                        tracks={this.state.suggestedSongs.filter(track => track.selected).map(track => track.uri)}
+                        userID={this.state.userInfo.id}/>
                 </div>
                 <div className="background"/>
             </div>

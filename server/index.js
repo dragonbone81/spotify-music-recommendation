@@ -5,13 +5,16 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const request = require('request');
 const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:3000';
-const CLIENT_ID = process.env.CLIENT_ID || 'xxxx';
-const CLIENT_SECRET = process.env.CLIENT_SECRET || 'xxxx';
+const CLIENT_ID = process.env.CLIENT_ID || 'xxx';
+const CLIENT_SECRET = process.env.CLIENT_SECRET || 'xxx';
 app.use(morgan("short"));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(cors());
 
+app.get("/", (req, res) => {
+    res.json({url: CLIENT_URL})
+});
 app.get("/login", async (req, res) => {
     request.post({
         url: 'https://accounts.spotify.com/api/token',

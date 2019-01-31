@@ -336,6 +336,7 @@ input:focus {
     flex-direction: row;
     min-height: 10%;
     /*width: 100%;*/
+    margin-bottom: 30px;
     justify-content: space-between;
     /*height: 100px;*/
     /*position: absolute;*/
@@ -358,6 +359,11 @@ input:focus {
 
 .select-tracks-title {
     position: relative;
+    align-self: center;
+}
+
+.select-tracks-number {
+    align-self: center;
 }
 
 .select-tracks-title:before {
@@ -368,7 +374,7 @@ input:focus {
     position: absolute;
     display: block;
     left: 50%;
-    bottom: 5px;
+    bottom: 0px;
     margin-left: -75px;
 }
 

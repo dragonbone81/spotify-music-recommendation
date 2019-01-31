@@ -54,8 +54,8 @@ class SuggestedSongs extends Component {
                     </div>
                     }
                 </div>
-                {this.props.suggestedSongs.length > 0 &&
-                <div className="song-cant-play">some songs can't be played :(</div>}
+                {/*{this.props.suggestedSongs.length > 0 &&*/}
+                {/*<div className="song-cant-play">some songs can't be played :(</div>}*/}
                 <div>
                     {this.props.suggestedSongs.map((song, index) => {
                         return (

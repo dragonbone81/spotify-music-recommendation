@@ -4,7 +4,7 @@ import Login from './Login'
 import Callback from './Callback'
 import Dashboard from './Dashboard'
 import {getAccessToken} from '../api/api';
-import {Switch, Route, withRouter, Redirect} from 'react-router-dom';
+import {Switch, Route} from 'react-router-dom';
 
 //TODO select which artists are related
 class App extends Component {

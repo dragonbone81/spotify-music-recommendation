@@ -14,7 +14,6 @@ const groupArray = (arr, chunkSize) => {
 };
 const getRecommendationsBasedOnSeed = async (access_token, seed_artists) => {
     seed_artists = groupArray(seed_artists, 1).map(seeds => {
-        //TODO market=from_token
         return fetch(`https://api.spotify.com/v1/recommendations?min_energy=0.5&limit=100&market=from_token&seed_artists=${encodeURIComponent(seeds.join())}`, {headers: {"Authorization": "Bearer " + access_token}})
             .then(response => response.json())
             .then(data => data.tracks);
@@ -23,7 +22,6 @@ const getRecommendationsBasedOnSeed = async (access_token, seed_artists) => {
 };
 const getSongsFromRecommendations = async (access_token, seed_songs) => {
     seed_songs = groupArray(seed_songs, 50).map(seed_songs => {
-        //TODO market=from_token
         return fetch(`https://api.spotify.com/v1/tracks?market=from_token&ids=${encodeURIComponent(seed_songs.map(song => song.id).join())}`, {headers: {"Authorization": "Bearer " + access_token}})
             .then(response => response.json())
             .then(data => data.tracks);
@@ -78,7 +76,6 @@ const createPlaylist = (access_token, userID, playlistInfo) => {
 };
 const addTracksToPlaylist = (access_token, playlistID, tracks) => {
     const output = groupArray(tracks, 100).map(tracks => {
-        //TODO market=from_token
         return fetch(`https://api.spotify.com/v1/playlists/${playlistID}/tracks`, {
             method: 'POST',
             body: JSON.stringify({uris: tracks}),

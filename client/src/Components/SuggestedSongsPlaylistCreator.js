@@ -49,7 +49,7 @@ class SuggestedSongsPlaylistCreator extends Component {
                         <div className="playlist-created-container">
                             <span className="playlist-created-text">
                                 Your playlist was created!<br/>
-                                <a target="_blank" className="playlist-created-url" href={this.state.playlistURL}>Click to view</a>
+                                <a rel="noopener noreferrer" target="_blank" className="playlist-created-url" href={this.state.playlistURL}>Click to view</a>
                             </span>
                         </div>
                         :

@@ -1,16 +1,11 @@
 import React, {Component} from 'react';
 import '../CSS/Dashboard.css';
 import {
-    getUsersRelatedArtists,
     getRecommendationsBasedOnSeed,
     getUserInfo,
-    getFollowedArtists,
     getArtists,
-    getRelatedArtists,
-    getSongsFromRecommendations,
-    getUniquesFromArray,
 } from '../api/api';
-import GetByFollowedArtists from './GetByFollowedArtists'
+// import GetByFollowedArtists from './GetByFollowedArtists'
 import ArtistSearchBox from './ArtistSearchBox'
 import SelectedArtists from './SelectedArtists'
 import SuggestedSongs from './SuggestedSongs'

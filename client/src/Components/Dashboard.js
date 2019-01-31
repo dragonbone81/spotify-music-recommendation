@@ -121,6 +121,21 @@ class Dashboard extends Component {
             selectedArtists: [...this.state.selectedArtists.slice(0, index), ...this.state.selectedArtists.slice(index + 1)]
         });
     };
+    selectDeselectAll = (boolean) => {
+        this.setState({
+            suggestedSongs: this.state.suggestedSongs.map(song => {
+                song.selected = boolean;
+                return song;
+            })
+        });
+    };
+    selectSong = (index) => {
+        const newSong = this.state.suggestedSongs[index];
+        newSong.selected = !newSong.selected;
+        this.setState({
+            suggestedSongs: [...this.state.suggestedSongs.slice(0, index), newSong, ...this.state.suggestedSongs.slice(index + 1)],
+        });
+    };
 
     render() {
         return (
@@ -165,7 +180,8 @@ class Dashboard extends Component {
                                      selectedArtists={this.state.selectedArtists}
                                      getArtistImage={this.getArtistImage}/>}
                 </div>
-                <SuggestedSongs suggestedSongs={this.state.suggestedSongs}/>
+                <SuggestedSongs selectSong={this.selectSong} selectDeselectAll={this.selectDeselectAll}
+                                suggestedSongs={this.state.suggestedSongs}/>
                 <div className="background"/>
             </div>
         );

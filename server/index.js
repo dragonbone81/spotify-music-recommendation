@@ -45,6 +45,7 @@ app.get("/refresh", async (req, res) => {
         },
         json: true
     }, (error, response, body) => {
+        console.log({access_token: body.access_token});
         if (error) {
             res.json({ohShit: ':('});
         } else {

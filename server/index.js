@@ -5,6 +5,7 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const request = require('request');
 const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:3000';
+const SERVER_URL = process.env.SERVER_URL || 'http://localhost:3001';
 const CLIENT_ID = process.env.CLIENT_ID || 'xxxx';
 const CLIENT_SECRET = process.env.CLIENT_SECRET || 'xxxx';
 app.use(morgan("short"));
@@ -20,7 +21,7 @@ app.get("/login", async (req, res) => {
         url: 'https://accounts.spotify.com/api/token',
         form: {
             code: req.query.code,
-            redirect_uri: 'http://localhost:3001',
+            redirect_uri: `${SERVER_URL}/login`,
             grant_type: 'authorization_code',
             client_id: CLIENT_ID,
             client_secret: CLIENT_SECRET,
@@ -45,7 +46,6 @@ app.get("/refresh", async (req, res) => {
         },
         json: true
     }, (error, response, body) => {
-        console.log({access_token: body.access_token});
         if (error) {
             res.json({ohShit: ':('});
         } else {

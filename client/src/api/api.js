@@ -54,7 +54,7 @@ const getUsersRelatedArtists = async (access_token) => {
 };
 const getAccessToken = () => {
     const refreshToken = localStorage.getItem('refresh_token');
-    if (refreshToken) {
+    if (refreshToken && refreshToken !== 'undefined') {
         return fetch(`${SERVER_URL}/refresh?refresh_token=${refreshToken}`)
             .then(response => response.json())
             .then(auth => localStorage.setItem("access_token", auth.access_token));

@@ -291,10 +291,27 @@ input:focus {
     /*position: absolute;*/
 }
 
+.song-div-basic {
+    display: flex;
+    flex-direction: row;
+    font-size: 25px;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 40px;
+}
+
+.song-basic-name {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.song-div-basic:hover {
+    background-color: #1b1b1b;
+}
+
 .song-div {
     display: flex;
     flex-direction: column;
-    /*align-content: flex-start;*/
     font-size: 25px;
     padding: 10px;
     cursor: pointer;
@@ -328,7 +345,8 @@ input:focus {
     text-align: center;
     cursor: pointer;
 }
-.top-col{
+
+.top-col {
     flex-basis: calc(100% / 3);
     display: flex;
     flex-direction: column;
@@ -341,6 +359,7 @@ input:focus {
     border-bottom: 3px solid rgba(69, 168, 200, 0.33);
     /* position: relative; */
 }
+
 .song-container-title {
     text-align: center;
     font-size: 30px;
@@ -403,7 +422,8 @@ input:focus {
     text-align: left;
     font-size: 14px;
 }
-.album-image{
+
+.album-image {
     min-width: 50px;
     min-height: 50px;
     border-radius: 50%;

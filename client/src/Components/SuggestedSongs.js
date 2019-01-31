@@ -39,6 +39,7 @@ class SuggestedSongs extends Component {
             return null;
         }
     };
+
     render() {
         return (
             <div className="top-col">
@@ -141,8 +142,14 @@ class SuggestedSongs extends Component {
                                             </div>
                                         </div>
                                         :
-                                        <div className="song-div">
-                                            {song.name}
+                                        <div className="song-div-basic">
+                                            <span className="song-basic-name">{song.name}</span>
+                                            {this.getAlbumImage(song.album.images) ?
+                                                <div className="album-image"
+                                                     style={{backgroundImage: `url(${this.getAlbumImage(song.album.images)})`}}/> :
+                                                null
+
+                                            }
                                         </div>
                                     }
                                 </div>

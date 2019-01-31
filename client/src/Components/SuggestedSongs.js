@@ -43,7 +43,8 @@ class SuggestedSongs extends Component {
                 </div>
                 <div className="song-container-title">
                     <div className="select-tracks-title">Select tracks</div>
-                    <div className="select-tracks-number">{this.props.suggestedSongs.length}</div>
+                    <div
+                        className="select-tracks-number">{this.props.suggestedSongs.filter(song => song.selected).length}/{this.props.suggestedSongs.length}</div>
                     {this.props.suggestedSongs.length > 0 &&
                     <div onClick={() => {
                         this.props.selectDeselectAll(this.state.allSelectedBoolean);

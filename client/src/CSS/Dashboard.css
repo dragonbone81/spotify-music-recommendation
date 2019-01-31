@@ -346,7 +346,7 @@ input:focus {
     font-size: 30px;
     display: flex;
     flex-direction: row;
-    min-height: 10%;
+    min-height: 50px;
     /*width: 100%;*/
     /*margin-bottom: 30px;*/
     justify-content: space-between;
@@ -402,4 +402,12 @@ input:focus {
 .song-cant-play {
     text-align: left;
     font-size: 14px;
+}
+.album-image{
+    min-width: 50px;
+    min-height: 50px;
+    border-radius: 50%;
+    align-self: center;
+    margin-right: 10px;
+    margin-left: auto;
 }

@@ -66,7 +66,7 @@ class Dashboard extends Component {
 
     artistClicked = (indexSearching) => {
         const selectedIndex = this.state.selectedArtists.findIndex(artist => artist.id === this.state.searchedArtists[indexSearching].id);
-        const newArtist = this.state.searchedArtists[indexSearching];
+        const newArtist = {...this.state.searchedArtists[indexSearching]};
         newArtist.clicked = !newArtist.clicked;
         if (selectedIndex !== -1) {
             this.setState({
@@ -74,10 +74,12 @@ class Dashboard extends Component {
                 searchedArtists: [...this.state.searchedArtists.slice(0, indexSearching), newArtist, ...this.state.searchedArtists.slice(indexSearching + 1)],
             })
         } else {
-            this.setState({
-                selectedArtists: [...this.state.selectedArtists, this.state.searchedArtists[indexSearching]],
-                searchedArtists: [...this.state.searchedArtists.slice(0, indexSearching), newArtist, ...this.state.searchedArtists.slice(indexSearching + 1)],
-            })
+            if (this.state.selectedArtists.length < 5) {
+                this.setState({
+                    selectedArtists: [...this.state.selectedArtists, this.state.searchedArtists[indexSearching]],
+                    searchedArtists: [...this.state.searchedArtists.slice(0, indexSearching), newArtist, ...this.state.searchedArtists.slice(indexSearching + 1)],
+                })
+            }
         }
     };
     selectAllArtists = (boolean) => {
@@ -111,7 +113,7 @@ class Dashboard extends Component {
     selectedArtistClicked = index => {
         const searchedArtistIndex = this.state.searchedArtists.findIndex(artist => artist.id === this.state.selectedArtists[index].id);
         if (searchedArtistIndex !== -1) {
-            const newArtist = this.state.searchedArtists[searchedArtistIndex];
+            const newArtist = {...this.state.searchedArtists[searchedArtistIndex]};
             newArtist.clicked = !newArtist.clicked;
             this.setState({
                 searchedArtists: [...this.state.searchedArtists.slice(0, searchedArtistIndex), newArtist, ...this.state.searchedArtists.slice(searchedArtistIndex + 1)],
@@ -130,7 +132,7 @@ class Dashboard extends Component {
         });
     };
     selectSong = (index) => {
-        const newSong = this.state.suggestedSongs[index];
+        const newSong = {...this.state.suggestedSongs[index]};
         newSong.selected = !newSong.selected;
         this.setState({
             suggestedSongs: [...this.state.suggestedSongs.slice(0, index), newSong, ...this.state.suggestedSongs.slice(index + 1)],

@@ -32,7 +32,13 @@ class SuggestedSongs extends Component {
             }
         }
     };
-
+    getAlbumImage = imageArr => {
+        if (imageArr.length !== 0) {
+            return imageArr[imageArr.length - 1].url;
+        } else {
+            return null;
+        }
+    };
     render() {
         return (
             <div className="top-col">
@@ -110,6 +116,12 @@ class SuggestedSongs extends Component {
                                                 <div
                                                     className="song-artists">{song.artists.map(artist => artist.name).join(", ")}</div>
                                             </div>
+                                            {this.getAlbumImage(song.album.images) ?
+                                                <div className="album-image"
+                                                     style={{backgroundImage: `url(${this.getAlbumImage(song.album.images)})`}}/> :
+                                                null
+
+                                            }
                                             <div className="song-select-icon" onClick={(event) => {
                                                 this.props.selectSong(index);
                                                 event.stopPropagation();

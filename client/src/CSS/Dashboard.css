@@ -74,7 +74,7 @@ body, html {
     display: flex;
     width: calc(100% - 30px);
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: center;
     overflow-x: auto;
     overflow-y: hidden;
     box-shadow: 0 0 5px rgba(101, 101, 101, 0.3);
@@ -256,24 +256,38 @@ body, html {
     flex-basis: calc(100% / 3);
     display: flex;
     flex-direction: column;
-    overflow-y: scroll;
+    overflow-y: auto;
     color: white;
-    -ms-overflow-style: none;
-    overflow: -moz-scrollbars-none;
     padding: 10px;
     max-height: 60%;
     border-bottom: 3px solid rgba(69, 168, 200, 0.33);
-    /*position: relative;*/
+}
+
+.songs-playlist-col::-webkit-scrollbar {
+    width: 7px;
+}
+
+/* Track */
+.songs-playlist-col::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+/* Handle */
+.songs-playlist-col::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+/* Handle on hover */
+.songs-playlist-col::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 
 .songs-suggested-text {
     margin: auto;
     text-align: center;
     font-size: 40px;
-}
-
-.songs-playlist-col::-webkit-scrollbar {
-    display: none;
 }
 
 input:focus {
@@ -405,7 +419,7 @@ input:focus {
     position: absolute;
     display: block;
     left: 50%;
-    bottom: 0px;
+    bottom: -5px;
     margin-left: -75px;
 }
 
@@ -413,9 +427,9 @@ input:focus {
     justify-content: center;
     align-self: center;
     justify-self: flex-end;
-    margin-left: auto;
     fill: #e2e2bc;
     cursor: pointer;
+    margin-right: 30px;
 }
 
 .song-cant-play {

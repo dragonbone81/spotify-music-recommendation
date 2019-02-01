@@ -119,7 +119,7 @@ body, html {
 }
 
 .search-results {
-    padding-top: 20px;
+    padding-top: 30px;
     padding-bottom: 100px;
     display: flex;
     flex-wrap: wrap;

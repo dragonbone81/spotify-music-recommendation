@@ -145,7 +145,7 @@ class SuggestedSongs extends Component {
                                         <div className="song-div-basic">
                                             <span className="song-basic-name">{song.name}</span>
                                             {this.getAlbumImage(song.album.images) ?
-                                                <div className="album-image"
+                                                <div onClick={()=>window.open(song.external_urls.spotify, '_blank')} className="album-image"
                                                      style={{backgroundImage: `url(${this.getAlbumImage(song.album.images)})`}}/> :
                                                 null
 

@@ -12,9 +12,10 @@ const getRelatedArtists = (access_token, artist) => {
 const groupArray = (arr, chunkSize) => {
     return arr.reduce((acc, val, i, arr) => !(i % chunkSize) ? acc.concat([arr.slice(i, i + chunkSize)]) : acc, []);
 };
-const getRecommendationsBasedOnSeed = async (access_token, seed_artists) => {
+const getRecommendationsBasedOnSeed = async (access_token, seed_artists, options) => {
+    const optionsArr = Object.keys(options).map(key => options[key].option === "disabled" ? null : `${options[key].option}_${key}=${options[key].value}`).filter(val => val);
     seed_artists = groupArray(seed_artists, 1).map(seeds => {
-        return fetch(`https://api.spotify.com/v1/recommendations?min_energy=0.5&limit=100&market=from_token&seed_artists=${encodeURIComponent(seeds.join())}`, {headers: {"Authorization": "Bearer " + access_token}})
+        return fetch(`https://api.spotify.com/v1/recommendations?${optionsArr.length > 0 ? "&" + optionsArr.join("&") : ""}&limit=100&market=from_token&seed_artists=${encodeURIComponent(seeds.join())}`, {headers: {"Authorization": "Bearer " + access_token}})
             .then(response => response.json())
             .then(data => data.tracks);
     });

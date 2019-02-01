@@ -10,6 +10,7 @@ import ArtistSearchBox from './ArtistSearchBox'
 import SelectedArtists from './SelectedArtists'
 import SuggestedSongs from './SuggestedSongs'
 import SuggestedSongsPlaylistCreator from './SuggestedSongsPlaylistCreator'
+import SliderOption from './SliderOption'
 
 class Dashboard extends Component {
     state = {
@@ -20,6 +21,14 @@ class Dashboard extends Component {
         searchedArtists: [],
         selectedArtists: [],
         suggestedSongs: [],
+        options: false,
+        optionsValues: {
+            acousticness: {value: 0.30, option: "disabled"},
+            danceability: {value: 0.30, option: "disabled"},
+            energy: {value: 0.70, option: "target"},
+            valence: {value: 0.70, option: "disabled"},
+        },
+        optionsChanged: false,
     };
 
     async componentDidUpdate(prevProps, prevState, snapshot) {
@@ -28,9 +37,13 @@ class Dashboard extends Component {
             //     console.log(artist);
             //     getRelatedArtists(localStorage.getItem("access_token"), artist).then(response => console.log(response));
             // })
-            const songs = await getRecommendationsBasedOnSeed(localStorage.getItem("access_token"), this.state.selectedArtists.map(artist => artist.id));
+            // const songs = await getRecommendationsBasedOnSeed(localStorage.getItem("access_token"), this.state.selectedArtists.map(artist => artist.id));
             // const x = await getSongsFromRecommendations(localStorage.getItem("access_token"), songs);
-            this.setState({suggestedSongs: songs});
+            // this.setState({suggestedSongs: songs});
+            this.getRecommendedSongs();
+        }
+        if (this.state.optionsChanged) {
+            this.getRecommendedSongs()
         }
     }
 
@@ -59,6 +72,15 @@ class Dashboard extends Component {
         }
     }
 
+    getRecommendedSongs = async () => {
+        if (this.state.selectedArtists.length > 0) {
+            this.setState({
+                optionsChanged: false,
+                suggestedSongs:
+                    await getRecommendationsBasedOnSeed(localStorage.getItem("access_token"), this.state.selectedArtists.map(artist => artist.id), this.state.optionsValues)
+            });
+        }
+    };
     artistClicked = (indexSearching) => {
         const selectedIndex = this.state.selectedArtists.findIndex(artist => artist.id === this.state.searchedArtists[indexSearching].id);
         const newArtist = {...this.state.searchedArtists[indexSearching]};
@@ -133,6 +155,27 @@ class Dashboard extends Component {
             suggestedSongs: [...this.state.suggestedSongs.slice(0, index), newSong, ...this.state.suggestedSongs.slice(index + 1)],
         });
     };
+    changeOptionsValue = (option, value) => {
+        if (this.state.optionsValues[option].value === value) {
+            return;
+        }
+        const optionsValues = {...this.state.optionsValues};
+        optionsValues[option].value = value;
+        this.setState({optionsValues: optionsValues});
+    };
+    changeFunction = (newOption, optionKey) => {
+        if (this.state.optionsValues[optionKey].option === newOption) {
+            return;
+        }
+        const optionsValues = {...this.state.optionsValues};
+        optionsValues[optionKey].option = newOption;
+        this.setState({optionsValues: optionsValues, optionsChanged: true});
+    };
+    sliderMouseUp = (key) => {
+        if (this.state.optionsValues[key].option !== 'disabled') {
+            this.setState({optionsChanged: true});
+        }
+    };
 
     render() {
         return (
@@ -169,6 +212,32 @@ class Dashboard extends Component {
                                 </div>
                             )
                         })}
+                        <div style={{height: this.state.options ? 200 : 0}}
+                             className={`expand-content ${!this.state.options ? "hidden" : ""}`}>
+                            <div onClick={() => this.setState({options: !this.state.options})} className="pull-tab">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                    <path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z"/>
+                                </svg>
+                            </div>
+                            <div onClick={(e) => e.stopPropagation()} className="options-content">
+                                {[
+                                    {key: "acousticness", value: "Acousticness"},
+                                    {key: "danceability", value: "Danceability"},
+                                    {key: "energy", value: "Energy"},
+                                    {key: "valence", value: "Valence"},
+                                ].map(option =>
+                                    <SliderOption
+                                        sliderMouseUp={() => this.sliderMouseUp(option.key)}
+                                        changeFunction={(newOption) => this.changeFunction(newOption, option.key)}
+                                        optionFunction={this.state.optionsValues[option.key].option}
+                                        key={option.key}
+                                        optionName={option.value}
+                                        value={this.state.optionsValues[option.key].value}
+                                        changeValue={(value) => this.changeOptionsValue(option.key, value)}/>
+                                )}
+                            </div>
+
+                        </div>
                     </div>
                     {this.state.searchedArtists.length === 0 &&
                     <div className="search-artists-text">Search for artists to be considered in the algorithm...</div>}

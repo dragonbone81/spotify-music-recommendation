@@ -79,7 +79,12 @@ class Dashboard extends Component {
                 suggestedSongs:
                     await getRecommendationsBasedOnSeed(localStorage.getItem("access_token"), this.state.selectedArtists.map(artist => artist.id), this.state.optionsValues)
             });
+        } else {
+            if (!this.state.options) {
+                this.setState({suggestedSongs: []});
+            }
         }
+
     };
     artistClicked = (indexSearching) => {
         const selectedIndex = this.state.selectedArtists.findIndex(artist => artist.id === this.state.searchedArtists[indexSearching].id);
